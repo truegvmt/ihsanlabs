@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ihsan Labs — Excellence in Action</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --parchment: #f5f0e8;
+    --sand: #e8dfc8;
+    --gold: #c4962a;
+    --gold-dim: #8a6a1e;
+    --gold-glow: rgba(196,150,42,0.12);
+    --moss: #2a3d2e;
+    --moss-light: #3d5c42;
+    --copper: #a0522d;
+    --mist: rgba(15,14,12,0.04);
+    --mist-strong: rgba(15,14,12,0.08);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Instrument Sans', sans-serif;
+    --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ── Navigation ────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196,150,42,0.15);
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .nav-pill {
+    background: var(--gold-glow);
+    border: 1px solid rgba(196,150,42,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--gold);
+  }
+
+  .nav-pill:hover { background: rgba(196,150,42,0.2); }
+
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8rem 2.5rem 4rem;
+    max-width: 900px;
+    position: relative;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease-silk) 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-silk) 0.35s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(15,14,12,0.55);
+    max-width: 480px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.9s var(--ease-silk) 0.5s forwards;
+  }
+
+  .arabic-ornament {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.3em;
+    margin-bottom: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease-silk) 0.15s forwards;
+  }
+
+  /* ── App container ──────────────────────────────────── */
+  .app-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  /* ── Step system ────────────────────────────────────── */
+  .step {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s var(--ease-silk), transform 0.5s var(--ease-silk);
+  }
+
+  .step.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Section headers ────────────────────────────────── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-sub {
+    font-size: 0.875rem;
+    color: rgba(15,14,12,0.5);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  /* ── Intention Tap ──────────────────────────────────── */
+  .intent-card {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--sand);
+    border-radius: 3px;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .toggle-group {
+    margin-bottom: 2rem;
+  }
+
+  .toggle-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .toggle-btn {
+    background: transparent;
+    border: 1px solid rgba(196,150,42,0.3);
+    color: rgba(15,14,12,0.6);
+    padding: 0.5rem 1.1rem;
+    border-radius: 2px;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.18s var(--ease-silk);
+    letter-spacing: 0.02em;
+  }
+
+  .toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-glow);
+  }
+
+  .toggle-btn.selected {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+  }
+
+  .budget-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .field-input {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--sand);
+    border-radius: 2px;
+    padding: 0.7rem 1rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field-input:focus {
+    border-color: var(--gold);
+  }
+
+  .field-input::placeholder {
+    color: rgba(15,14,12,0.3);
+  }
+
+  .why-prompt {
+    background: rgba(196,150,42,0.04);
+    border-left: 2px solid var(--gold);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .why-prompt p {
+    font-family: var(--serif);
+    font-style: italic;
+    color: rgba(15,14,12,0.6);
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .why-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--sand);
+    width: 100%;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    padding: 0.3rem 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .why-input:focus { border-color: var(--gold); }
+
+  /* ── Primary button ─────────────────────────────────── */
+  .btn-primary {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    padding: 0.9rem 2.5rem;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s var(--ease-silk);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .btn-primary:hover {
+    background: var(--moss);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold-dim);
+    border: 1px solid rgba(196,150,42,0.3);
+    padding: 0.9rem 2rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── Resonance Preview ──────────────────────────────── */
+  .resonance-card {
+    background: var(--moss);
+    color: var(--parchment);
+    border-radius: 3px;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resonance-card::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(196,150,42,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .barakah-score {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .barakah-num {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .barakah-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    padding-bottom: 0.6rem;
+  }
+
+  .evocative-line {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.3;
+    color: rgba(245,240,232,0.9);
+    margin-bottom: 1.5rem;
+  }
+
+  .project-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(245,240,232,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .meta-cell {
+    background: rgba(245,240,232,0.04);
+    padding: 1rem;
+  }
+
+  .meta-val {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .meta-key {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+  }
+
+  .allocation-preview {
+    border-top: 1px solid rgba(245,240,232,0.1);
+    padding-top: 1.5rem;
+  }
+
+  .alloc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+  }
+
+  .alloc-project {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.75);
+  }
+
+  .alloc-amount {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--gold);
+  }
+
+  .alloc-bar-wrap {
+    width: 80px;
+    height: 2px;
+    background: rgba(245,240,232,0.1);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .alloc-bar {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 1px;
+    transition: width 1s var(--ease-silk);
+  }
+
+  .resonance-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-give {
+    flex: 1;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 1rem 2rem;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s var(--ease-silk);
+  }
+
+  .btn-give:hover {
+    background: #d4a430;
+    transform: translateY(-1px);
+  }
+
+  /* ── Reflection card ────────────────────────────────── */
+  .reflection-card {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--sand);
+    border-radius: 3px;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .reflection-card .voice-text {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .dua-box {
+    background: var(--gold-glow);
+    border: 1px solid rgba(196,150,42,0.25);
+    border-radius: 2px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dua-box .dua-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .dua-box .dua-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── Living Waqf Card ───────────────────────────────── */
+  .waqf-card {
+    background: linear-gradient(135deg, var(--ink) 0%, var(--moss) 100%);
+    color: var(--parchment);
+    border-radius: 3px;
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .waqf-card::after {
+    content: 'إحسان';
+    position: absolute;
+    bottom: -1rem;
+    right: 1.5rem;
+    font-family: var(--serif);
+    font-size: 6rem;
+    color: rgba(196,150,42,0.06);
+    pointer-events: none;
+    letter-spacing: 0.1em;
+  }
+
+  .waqf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .waqf-title {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+    line-height: 1.3;
+  }
+
+  .waqf-status-pill {
+    background: rgba(196,150,42,0.2);
+    border: 1px solid rgba(196,150,42,0.4);
+    color: var(--gold);
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+    border-radius: 20px;
+  }
+
+  .waqf-status-pill.active::before {
+    content: '● ';
+    color: #4caf50;
+    font-size: 0.5rem;
+  }
+
+  .serenity-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .serenity-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .serenity-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(245,240,232,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .serenity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 2px;
+    transition: width 1.5s var(--ease-silk);
+  }
+
+  .serenity-label {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+  }
+
+  .waqf-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(245,240,232,0.06);
+    margin-bottom: 2rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .waqf-stat {
+    background: rgba(245,240,232,0.03);
+    padding: 1rem;
+  }
+
+  .waqf-stat-val {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--parchment);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .waqf-stat-key {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+  }
+
+  .latest-update {
+    background: rgba(245,240,232,0.05);
+    border-left: 2px solid var(--gold);
+    padding: 1rem 1.2rem;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .update-date {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.35);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .update-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.5;
+  }
+
+  .citation-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.35);
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .citation-chip:hover { color: var(--gold); }
+
+  /* ── Due diligence panel ────────────────────────────── */
+  .dd-panel {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--sand);
+    border-radius: 3px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dd-score-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-ring {
+    width: 64px;
+    height: 64px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--sand); stroke-width: 4; }
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 157;
+    stroke-dashoffset: 47;
+    transition: stroke-dashoffset 1.5s var(--ease-silk);
+  }
+
+  .score-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .dd-summary {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: rgba(15,14,12,0.65);
+  }
+
+  .risk-list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .risk-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--mist-strong);
+    font-size: 0.82rem;
+    color: rgba(15,14,12,0.65);
+  }
+
+  .risk-badge {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .risk-badge.low    { background: rgba(76,175,80,0.1);  color: #4caf50; border: 1px solid rgba(76,175,80,0.3); }
+  .risk-badge.medium { background: rgba(255,152,0,0.1);  color: #ff9800; border: 1px solid rgba(255,152,0,0.3); }
+  .risk-badge.high   { background: rgba(244,67,54,0.1);  color: #f44336; border: 1px solid rgba(244,67,54,0.3); }
+
+  /* ── Confirmation / Receipt ────────────────────────── */
+  .receipt-card {
+    background: var(--ink);
+    color: var(--parchment);
+    border-radius: 3px;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .receipt-check {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(196,150,42,0.15);
+    border: 1px solid rgba(196,150,42,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.3rem;
+  }
+
+  .receipt-title {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .receipt-sub {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+  }
+
+  .receipt-hash {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.1em;
+    word-break: break-all;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .receipt-hash span { color: var(--gold); }
+
+  /* ── Loading states ─────────────────────────────────── */
+  .thinking {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.5rem;
+    color: rgba(15,14,12,0.4);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .thinking-dots {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .thinking-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  /* ── Progress steps ─────────────────────────────────── */
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    padding-top: 6rem;
+  }
+
+  .progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sand);
+    transition: all 0.3s var(--ease-silk);
+  }
+
+  .progress-dot.done { background: var(--gold); }
+  .progress-dot.current {
+    background: var(--gold);
+    width: 18px;
+    border-radius: 3px;
+  }
+
+  .progress-line {
+    width: 24px;
+    height: 1px;
+    background: var(--sand);
+  }
+
+  /* ── Divider ────────────────────────────────────────── */
+  .ornament-divider {
+    text-align: center;
+    color: var(--gold-dim);
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    letter-spacing: 0.4em;
+    margin: 2rem 0;
+    opacity: 0.4;
+  }
+
+  /* ── Animations ─────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40%           { transform: scale(1);   opacity: 1; }
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+
+  .fade-in {
+    animation: fadeUp 0.5s var(--ease-silk) forwards;
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 640px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .app-container { padding: 0 1rem 4rem; }
+    .intent-card, .resonance-card, .waqf-card { padding: 1.8rem; }
+    .budget-row { grid-template-columns: 1fr; }
+    .project-meta { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: clamp(2.5rem, 10vw, 4rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">Ihsan <span>Labs</span></div>
+  <div class="nav-right">
+    <span style="display:none" id="nav-dashboard">Your Waqf</span>
+    <a onclick="showHero()" style="cursor:pointer; color: inherit; text-decoration:none;">About</a>
+    <button class="nav-pill" onclick="startFlow()">Give Now</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero-section">
+  <div class="hero">
+    <div class="arabic-ornament">إحسان</div>
+    <div class="hero-label">Waqf & Charity Intelligence Engine</div>
+    <h1 class="hero-title">
+      Excellence<br>in <em>every</em><br>act of giving.
+    </h1>
+    <p class="hero-sub">
+      State your intention. Set your budget. In 90 seconds, receive a 
+      soul-calibrated allocation plan — verified by evidence, optimised 
+      for long-term barakah, executable in a single tap.
+    </p>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; opacity:0; animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.65s forwards;">
+      <button class="btn-primary" onclick="startFlow()">
+        Begin Intention Tap
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-secondary" onclick="scrollToDemo()">See how it works</button>
+    </div>
+
+    <!-- Live ticker -->
+    <div style="margin-top:4rem; opacity:0; animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.9s forwards;">
+      <div style="font-family:var(--mono); font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:0.8rem;">
+        Live impact · right now
+      </div>
+      <div style="display:flex; gap:2.5rem; flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--serif); font-size:1.8rem; font-weight:300; color:var(--ink)" id="counter-wells">1,247</div>
+          <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.15em; color:rgba(15,14,12,0.4); text-transform:uppercase;">Active waqfs</div>
+        </div>
+        <div>
+          <div style="font-family:var(--serif); font-size:1.8rem; font-weight:300; color:var(--ink)">94,000</div>
+          <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.15em; color:rgba(15,14,12,0.4); text-transform:uppercase;">Beneficiaries reached</div>
+        </div>
+        <div>
+          <div style="font-family:var(--serif); font-size:1.8rem; font-weight:300; color:var(--gold)">0.97</div>
+          <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.15em; color:rgba(15,14,12,0.4); text-transform:uppercase;">Avg evidence score</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- App Flow -->
+<div class="app-container" id="app-section" style="display:none">
+
+  <!-- Progress indicator -->
+  <div class="progress-steps" id="progress-bar">
+    <div class="progress-dot current" id="pd-0"></div>
+    <div class="progress-line"></div>
+    <div class="progress-dot" id="pd-1"></div>
+    <div class="progress-line"></div>
+    <div class="progress-dot" id="pd-2"></div>
+    <div class="progress-line"></div>
+    <div class="progress-dot" id="pd-3"></div>
+    <div class="progress-line"></div>
+    <div class="progress-dot" id="pd-4"></div>
+  </div>
+
+  <!-- ──────────────────────── STEP 0: Intention Tap ─── -->
+  <div class="step active" id="step-0">
+    <div class="section-label">Step 01 / 05</div>
+    <h2 class="section-title">Your intention</h2>
+    <p class="section-sub">15 seconds. Four choices. A plan calibrated to your values.</p>
+
+    <div class="intent-card">
+      <!-- Focus -->
+      <div class="toggle-group">
+        <span class="toggle-label">What matters most to you?</span>
+        <div class="toggle-row" id="focus-group">
+          <button class="toggle-btn" onclick="selectToggle('focus','water',this)">💧 Water</button>
+          <button class="toggle-btn" onclick="selectToggle('focus','education',this)">📚 Education</button>
+          <button class="toggle-btn" onclick="selectToggle('focus','food',this)">🌾 Food</button>
+          <button class="toggle-btn" onclick="selectToggle('focus','healthcare',this)">🏥 Healthcare</button>
+          <button class="toggle-btn" onclick="selectToggle('focus','mosque',this)">🕌 Mosque</button>
+          <button class="toggle-btn" onclick="selectToggle('focus','orphan',this)">🤲 Orphan care</button>
+        </div>
+      </div>
+
+      <!-- Horizon -->
+      <div class="toggle-group">
+        <span class="toggle-label">How long should the impact last?</span>
+        <div class="toggle-row" id="horizon-group">
+          <button class="toggle-btn" onclick="selectToggle('horizon','one_time',this)">One gift</button>
+          <button class="toggle-btn" onclick="selectToggle('horizon','monthly',this)">Monthly</button>
+          <button class="toggle-btn selected" onclick="selectToggle('horizon','perpetual',this)">Forever (waqf)</button>
+        </div>
+      </div>
+
+      <!-- Region -->
+      <div class="toggle-group">
+        <span class="toggle-label">Where?</span>
+        <div class="toggle-row" id="region-group">
+          <button class="toggle-btn" onclick="selectToggle('region','pk',this)">Pakistan</button>
+          <button class="toggle-btn" onclick="selectToggle('region','bd',this)">Bangladesh</button>
+          <button class="toggle-btn" onclick="selectToggle('region','so',this)">Somalia</button>
+          <button class="toggle-btn" onclick="selectToggle('region','ye',this)">Yemen</button>
+          <button class="toggle-btn" onclick="selectToggle('region','ps',this)">Palestine</button>
+          <button class="toggle-btn" onclick="selectToggle('region','global',this)">Anywhere</button>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="budget-row">
+        <div class="field-group">
+          <label class="field-label">Budget (USD)</label>
+          <input class="field-input" type="number" id="budget-input" placeholder="500" min="10">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Currency</label>
+          <select class="field-input" id="currency-select">
+            <option>USD</option>
+            <option>GBP</option>
+            <option>EUR</option>
+            <option>QAR</option>
+            <option>AED</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Why prompt -->
+      <div class="why-prompt">
+        <p>Why are you giving right now?</p>
+        <input class="why-input" id="why-input" type="text" placeholder="Three words…  e.g. for my mother, Ramadan barakah, legacy">
+      </div>
+
+      <button class="btn-primary" onclick="runOptimizer()">
+        Find my allocation
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ──────────────────── STEP 1: Loading / Thinking ─── -->
+  <div class="step" id="step-loading">
+    <div class="section-label">Analysing</div>
+    <h2 class="section-title">Finding your allocation</h2>
+    <p class="section-sub">Cross-referencing verified nonprofit data, field reports, and barakah weights.</p>
+    <div class="intent-card">
+      <div class="thinking">
+        <div class="thinking-dots">
+          <div class="thinking-dot"></div>
+          <div class="thinking-dot"></div>
+          <div class="thinking-dot"></div>
+        </div>
+        <span id="thinking-text">Querying Charity Navigator data…</span>
+      </div>
+      <div style="height:2px; background: var(--sand); border-radius:1px; overflow:hidden; margin: 0 1.5rem 1.5rem;">
+        <div id="progress-fill" style="height:100%; width:0%; background: var(--gold); transition: width 0.4s ease; border-radius:1px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────── STEP 2: Resonance Preview ───── -->
+  <div class="step" id="step-2">
+    <div class="section-label">Step 02 / 05</div>
+    <h2 class="section-title">Your allocation</h2>
+    <p class="section-sub">Calibrated to your intention. Verified by evidence. Tap to give now or explore the detail.</p>
+
+    <div class="resonance-card" id="resonance-card">
+      <div class="barakah-score">
+        <div class="barakah-num" id="res-barakah">—</div>
+        <div class="barakah-label">Barakah<br>score</div>
+      </div>
+      <div class="evocative-line" id="res-evocative">—</div>
+
+      <div class="project-meta" id="res-meta">
+        <div class="meta-cell">
+          <span class="meta-val" id="res-beneficiaries">—</span>
+          <span class="meta-key">Beneficiaries</span>
+        </div>
+        <div class="meta-cell">
+          <span class="meta-val" id="res-duration">—</span>
+          <span class="meta-key">Est. duration</span>
+        </div>
+        <div class="meta-cell">
+          <span class="meta-val" id="res-waqf">—</span>
+          <span class="meta-key">Waqf eligible</span>
+        </div>
+      </div>
+
+      <div class="allocation-preview" id="res-allocations"></div>
+
+      <div class="resonance-actions">
+        <button class="btn-give" onclick="goToReflection()">Give now</button>
+        <button class="btn-secondary" style="color:rgba(245,240,232,0.6); border-color:rgba(245,240,232,0.15);" onclick="showDueDiligence()">Explain →</button>
+      </div>
+    </div>
+
+    <!-- Due diligence (hidden by default) -->
+    <div id="dd-panel" style="display:none">
+      <div class="dd-panel fade-in">
+        <div class="section-label" style="margin-bottom:1rem;">Due Diligence Report</div>
+        <div class="dd-score-row">
+          <div class="score-ring">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <circle class="score-ring-bg" cx="32" cy="32" r="25"/>
+              <circle class="score-ring-fill" id="dd-ring" cx="32" cy="32" r="25"/>
+            </svg>
+            <div class="score-ring-label" id="dd-score-num">—</div>
+          </div>
+          <div class="dd-summary" id="dd-summary">Loading analysis…</div>
+        </div>
+
+        <div class="section-label" style="margin-bottom:0.6rem">Risk factors</div>
+        <ul class="risk-list" id="dd-risks"></ul>
+
+        <div class="section-label" style="margin-bottom:0.4rem">Maintenance plan</div>
+        <p style="font-size:0.82rem; color:rgba(15,14,12,0.6); line-height:1.6; margin-bottom:1.5rem" id="dd-maintenance">—</p>
+
+        <div class="section-label" style="margin-bottom:0.6rem">Citations</div>
+        <div id="dd-citations" style="font-family:var(--mono); font-size:0.6rem; color:rgba(15,14,12,0.4); line-height:1.9;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────────────── STEP 3: Reflection ─────────── -->
+  <div class="step" id="step-3">
+    <div class="section-label">Step 03 / 05</div>
+    <h2 class="section-title">A moment before you give</h2>
+    <p class="section-sub">Optional. 60 seconds. A reflection connecting your intention to the lives it will touch.</p>
+
+    <div class="reflection-card">
+      <div class="voice-text" id="reflection-voice">—</div>
+      <div class="ornament-divider">⸻ ◆ ⸻</div>
+      <div class="dua-box">
+        <div class="dua-label">Dua — share with family</div>
+        <div class="dua-text" id="reflection-dua">—</div>
+      </div>
+      <p style="font-size:0.8rem; color:rgba(15,14,12,0.4); line-height:1.6; font-style:italic; margin-bottom:2rem" id="reflection-sadaqah">—</p>
+    </div>
+
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <button class="btn-primary" onclick="goToApproval()">
+        Confirm &amp; Give
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-secondary" onclick="goToApproval()">Skip reflection</button>
+    </div>
+  </div>
+
+  <!-- ─────────────────── STEP 4: Fast Approval ────────── -->
+  <div class="step" id="step-4">
+    <div class="section-label">Step 04 / 05</div>
+    <h2 class="section-title">Confirm your gift</h2>
+    <p class="section-sub">Review the split. One tap to give. A cryptographic receipt is issued immediately.</p>
+
+    <div class="intent-card" id="approval-summary"></div>
+
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem;">
+      <button class="btn-primary" onclick="processDonation()">
+        Confirm &amp; Give
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-secondary" onclick="goToStep(0)">Change intention</button>
+    </div>
+  </div>
+
+  <!-- ─────────────────── STEP 5: Living Waqf Card ─────── -->
+  <div class="step" id="step-5">
+    <div class="section-label">Step 05 / 05 — Your Living Waqf</div>
+    <h2 class="section-title">Confirmed.</h2>
+    <p class="section-sub">Your waqf is now active. It will report back to you quietly — one sentence at a time.</p>
+
+    <div class="receipt-card" style="margin-bottom:1.5rem;">
+      <div class="receipt-check">✓</div>
+      <div class="receipt-title">Donation confirmed</div>
+      <div class="receipt-sub" id="receipt-amount">$500 · Allocated across 2 projects</div>
+      <div class="receipt-hash">
+        <div style="margin-bottom:0.4rem; font-size:0.5rem; text-transform:uppercase; letter-spacing:0.2em; color:rgba(245,240,232,0.2);">Receipt hash</div>
+        <span id="receipt-hash-val">—</span>
+      </div>
+    </div>
+
+    <div class="waqf-card">
+      <div class="waqf-header">
+        <div>
+          <div class="waqf-title" id="waqf-name">Solar Borehole · Sindh</div>
+          <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.15em; color:rgba(245,240,232,0.3); text-transform:uppercase; margin-top:0.4rem">Your living waqf</div>
+        </div>
+        <div class="waqf-status-pill active">Active</div>
+      </div>
+
+      <div class="serenity-row">
+        <div>
+          <div class="serenity-num" id="waqf-serenity">82</div>
+          <div class="serenity-label">Serenity</div>
+        </div>
+        <div style="flex:1">
+          <div class="serenity-track">
+            <div class="serenity-fill" id="serenity-fill" style="width:82%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="waqf-stats">
+        <div class="waqf-stat">
+          <span class="waqf-stat-val" id="waqf-beneficiaries">340</span>
+          <span class="waqf-stat-key">Families served</span>
+        </div>
+        <div class="waqf-stat">
+          <span class="waqf-stat-val" id="waqf-months">14</span>
+          <span class="waqf-stat-key">Months active</span>
+        </div>
+        <div class="waqf-stat">
+          <span class="waqf-stat-val" id="waqf-next-maint">Apr 2026</span>
+          <span class="waqf-stat-key">Next maintenance</span>
+        </div>
+        <div class="waqf-stat">
+          <span class="waqf-stat-val" id="waqf-uptime">99.8%</span>
+          <span class="waqf-stat-key">Uptime</span>
+        </div>
+      </div>
+
+      <div class="latest-update">
+        <div class="update-date">Latest update · Feb 2026</div>
+        <div class="update-text" id="waqf-update">Your well served its 340th family this week, drawing water through the dry season without interruption.</div>
+        <div class="citation-chip" onclick="toggleRawEvidence()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6M9 16h6M9 8h6M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Show raw evidence
+        </div>
+      </div>
+
+      <div id="raw-evidence" style="display:none; margin-top:1rem; background:rgba(255,255,255,0.04); border:1px solid rgba(245,240,232,0.08); border-radius:2px; padding:1rem;">
+        <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.15em; color:rgba(245,240,232,0.25); text-transform:uppercase; margin-bottom:0.5rem">Source: Partner Field Report Q2 2025 · PDF hash: 4f8a2c…</div>
+        <p style="font-family:var(--mono); font-size:0.65rem; color:rgba(245,240,232,0.45); line-height:1.7">"The borehole was inspected on 14 February 2025. Pump operating at full capacity. Local committee conducted routine maintenance. No issues reported. Serving 340 registered households."</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem; text-align:center;">
+      <div style="font-family:var(--mono); font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(15,14,12,0.3); margin-bottom:1rem">Your waqf will send you quiet updates</div>
+      <button class="btn-secondary" onclick="resetFlow()" style="font-size:0.65rem">Give again →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── State ───────────────────────────────────────────────
+const state = {
+  focus: null,
+  horizon: 'perpetual',
+  region: null,
+  budget: 500,
+  currency: 'USD',
+  why: '',
+  plan: null,
+  ddVisible: false,
+};
+
+// ── Navigation ──────────────────────────────────────────
+function showHero() {
+  document.getElementById('hero-section').style.display = '';
+  document.getElementById('app-section').style.display = 'none';
+}
+
+function startFlow() {
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('app-section').style.display = 'block';
+  goToStep(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToDemo() {
+  startFlow();
+}
+
+function resetFlow() {
+  state.plan = null;
+  state.focus = null;
+  state.region = null;
+  goToStep(0);
+}
+
+// ── Step management ─────────────────────────────────────
+function goToStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const steps = ['step-0', 'step-loading', 'step-2', 'step-3', 'step-4', 'step-5'];
+  const stepEl = document.getElementById(steps[n] || `step-${n}`);
+  if (stepEl) {
+    setTimeout(() => stepEl.classList.add('active'), 20);
+  }
+  updateProgress(n);
+}
+
+function updateProgress(n) {
+  const dots = 5;
+  for (let i = 0; i < dots; i++) {
+    const dot = document.getElementById(`pd-${i}`);
+    if (!dot) continue;
+    dot.classList.remove('done', 'current');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('current');
+  }
+}
+
+// ── Toggle selectors ────────────────────────────────────
+function selectToggle(field, value, btn) {
+  state[field] = value;
+  const group = btn.closest('.toggle-row');
+  group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// ── Run optimizer ───────────────────────────────────────
+async function runOptimizer() {
+  state.budget = parseFloat(document.getElementById('budget-input').value) || 500;
+  state.currency = document.getElementById('currency-select').value;
+  state.why = document.getElementById('why-input').value;
+
+  if (!state.focus) {
+    // Default to water if nothing selected
+    state.focus = 'water';
+    document.querySelector('[onclick*="water"]')?.classList.add('selected');
+  }
+  if (!state.region) {
+    state.region = 'global';
+    document.querySelector('[onclick*="global"]')?.classList.add('selected');
+  }
+
+  goToStep(1); // Loading
+
+  // Animate progress bar
+  const fill = document.getElementById('progress-fill');
+  const thinkingText = document.getElementById('thinking-text');
+  const stages = [
+    [20, 'Querying Charity Navigator data…'],
+    [45, 'Retrieving field evidence…'],
+    [70, 'Applying barakah weights…'],
+    [88, 'Composing your reflection…'],
+    [100, 'Done.'],
+  ];
+
+  for (const [pct, text] of stages) {
+    await delay(600);
+    fill.style.width = pct + '%';
+    thinkingText.textContent = text;
+  }
+
+  // Generate mock plan (in production: call /functions/v1/allocation-optimizer)
+  state.plan = generateMockPlan();
+
+  await delay(400);
+  renderResonancePreview(state.plan);
+  goToStep(2);
+}
+
+function generateMockPlan() {
+  const focusData = {
+    water:     { title: 'Solar Borehole · Sindh, Pakistan',  evocative: 'Water rising from the earth, season after season.', beneficiaries: 340, duration: 60, barakah: 87 },
+    education: { title: 'Girls\' School Expansion · Kabul',    evocative: 'Knowledge that outlives the donor by a generation.', beneficiaries: 180, duration: 84, barakah: 84 },
+    food:      { title: 'Sustainable Food Garden · Mogadishu', evocative: 'A harvest that returns with every rain.', beneficiaries: 500, duration: 36, barakah: 79 },
+    healthcare:{ title: 'Mobile Clinic · Rural Bangladesh',    evocative: 'Healing that travels where it is needed most.', beneficiaries: 800, duration: 24, barakah: 81 },
+    mosque:    { title: 'Community Mosque · East Java',        evocative: 'A place of prostration that echoes for decades.', beneficiaries: 1200, duration: 120, barakah: 86 },
+    orphan:    { title: 'Orphan Care Centre · Nairobi',        evocative: 'A home where loss becomes belonging.', beneficiaries: 60, duration: 72, barakah: 88 },
+  };
+
+  const d = focusData[state.focus] || focusData.water;
+
+  return {
+    plan_id: 'plan_' + Math.random().toString(36).slice(2,8),
+    evocative_line: d.evocative,
+    barakah_score: d.barakah,
+    voice_text: `Your gift of $${state.budget} funds ${d.title} — ${d.beneficiaries} people will draw clean benefit from it, season after season. This is giving with roots.`,
+    dua_template: `May Allah accept this charity, multiply its reward, and write it in your scales and those of your family until the Day of Rising.`,
+    spiritual_note: `Because this project produces ${state.focus === 'water' ? 'clean water' : state.focus === 'education' ? 'knowledge' : 'ongoing benefit'} continuously, every use renews your reward — the textbook definition of sadaqah jariyah.`,
+    top_project: {
+      id: 'proj_' + Math.random().toString(36).slice(2,8),
+      title: d.title,
+      estimated_beneficiaries: d.beneficiaries,
+      estimated_duration_months: d.duration,
+      is_waqf_eligible: state.horizon === 'perpetual',
+    },
+    allocations: [
+      { project_title: d.title, amount_usd: Math.round(state.budget * 0.85), pct: 85, reason: 'Highest composite score' },
+      { project_title: 'Emergency Relief Fund · UNHCR Partner', amount_usd: Math.round(state.budget * 0.15), pct: 15, reason: 'Diversification' },
+    ],
+  };
+}
+
+function renderResonancePreview(plan) {
+  document.getElementById('res-barakah').textContent = plan.barakah_score;
+  document.getElementById('res-evocative').textContent = `"${plan.evocative_line}"`;
+  document.getElementById('res-beneficiaries').textContent = plan.top_project.estimated_beneficiaries.toLocaleString();
+  document.getElementById('res-duration').textContent = plan.top_project.estimated_duration_months + ' mo';
+  document.getElementById('res-waqf').textContent = plan.top_project.is_waqf_eligible ? 'Yes' : 'No';
+
+  const allocDiv = document.getElementById('res-allocations');
+  allocDiv.innerHTML = plan.allocations.map(a => `
+    <div class="alloc-row">
+      <span class="alloc-project">${a.project_title}</span>
+      <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:${a.pct}%"></div></div>
+      <span class="alloc-amount">$${a.amount_usd}</span>
+    </div>
+  `).join('');
+}
+
+// ── Due Diligence ───────────────────────────────────────
+function showDueDiligence() {
+  const panel = document.getElementById('dd-panel');
+  state.ddVisible = !state.ddVisible;
+  panel.style.display = state.ddVisible ? 'block' : 'none';
+
+  if (state.ddVisible) {
+    renderDueDiligence();
+  }
+}
+
+function renderDueDiligence() {
+  const score = state.plan?.barakah_score || 78;
+  const circumference = 157;
+  const offset = circumference - (score / 100) * circumference;
+
+  document.getElementById('dd-score-num').textContent = score;
+  document.getElementById('dd-ring').style.strokeDashoffset = offset;
+
+  document.getElementById('dd-summary').textContent = `${state.plan?.top_project?.title} is operated by a 4-star Charity Navigator rated organization. Field reports confirm operational continuity for 14 months with two documented maintenance inspections. Beneficiary count corroborated by partner field report dated Q2 2025.`;
+
+  const risks = [
+    { type: 'operational', severity: 'low', text: 'Local committee trained, but documentation of handover protocol is limited in available evidence.' },
+    { type: 'evidence_gap', severity: 'medium', text: 'Independent audit of 2024 financials not yet available in the document corpus.' },
+    { type: 'political', severity: 'low', text: 'Region is stable; no conflict flags in signal feed as of today.' },
+  ];
+
+  document.getElementById('dd-risks').innerHTML = risks.map(r => `
+    <li class="risk-item">
+      <span class="risk-badge ${r.severity}">${r.severity}</span>
+      <span>${r.text}</span>
+    </li>
+  `).join('');
+
+  document.getElementById('dd-maintenance').textContent = 'Local committee performs biannual inspections. Next maintenance window: April 2026. Reserve fund covers 2 full maintenance cycles.';
+
+  document.getElementById('dd-citations').innerHTML = `
+    [1] Partner Field Report Q2 2025 · Verified PDF hash: 4f8a2c…<br>
+    [2] Charity Navigator Profile · EIN: 13-1837418 · Score: ${score}<br>
+    [3] GlobalGiving Project Update · March 2025
+  `;
+}
+
+// ── Reflection ──────────────────────────────────────────
+function goToReflection() {
+  document.getElementById('reflection-voice').textContent = state.plan?.voice_text || '';
+  document.getElementById('reflection-dua').textContent = state.plan?.dua_template || '';
+  document.getElementById('reflection-sadaqah').textContent = state.plan?.spiritual_note || '';
+  goToStep(3);
+}
+
+// ── Approval ────────────────────────────────────────────
+function goToApproval() {
+  const summary = document.getElementById('approval-summary');
+  summary.innerHTML = `
+    <div class="section-label" style="margin-bottom:1rem">Allocation summary</div>
+    ${state.plan.allocations.map(a => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; border-bottom:1px solid var(--mist-strong);">
+        <div>
+          <div style="font-size:0.85rem; font-weight:400; margin-bottom:0.2rem">${a.project_title}</div>
+          <div style="font-family:var(--mono); font-size:0.55rem; letter-spacing:0.1em; color:rgba(15,14,12,0.4); text-transform:uppercase">${a.reason}</div>
+        </div>
+        <div style="font-family:var(--serif); font-size:1.3rem; font-weight:300; color:var(--gold)">$${a.amount_usd}</div>
+      </div>
+    `).join('')}
+    <div style="display:flex; justify-content:space-between; padding:1rem 0; margin-top:0.2rem;">
+      <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(15,14,12,0.4)">Total</div>
+      <div style="font-family:var(--serif); font-size:1.5rem; font-weight:300">$${state.budget}</div>
+    </div>
+    <div style="font-family:var(--mono); font-size:0.6rem; color:rgba(15,14,12,0.35); letter-spacing:0.08em; line-height:1.7; padding:0.8rem; background:var(--mist); border-radius:2px; margin-top:0.5rem">
+      A cryptographic receipt will be issued immediately. Your allocation is immutably logged.
+    </div>
+  `;
+  goToStep(4);
+}
+
+// ── Process donation ────────────────────────────────────
+async function processDonation() {
+  // In production: POST to Stripe + record donation + generate receipt hash
+  const hash = generateHash();
+  document.getElementById('receipt-hash-val').innerHTML = `<span style="color:var(--gold)">sha256:</span>${hash}`;
+  document.getElementById('receipt-amount').textContent = `$${state.budget} ${state.currency} · ${state.plan.allocations.length} projects · ${state.horizon === 'perpetual' ? 'Perpetual waqf' : 'One-time gift'}`;
+  document.getElementById('waqf-name').textContent = state.plan.top_project.title;
+  document.getElementById('waqf-beneficiaries').textContent = state.plan.top_project.estimated_beneficiaries;
+  document.getElementById('waqf-months').textContent = '0'; // just started
+
+  goToStep(5);
+
+  // Animate serenity fill
+  setTimeout(() => {
+    document.getElementById('serenity-fill').style.width = '82%';
+  }, 500);
+}
+
+// ── Utilities ───────────────────────────────────────────
+function generateHash() {
+  const chars = '0123456789abcdef';
+  return Array.from({ length: 64 }, () => chars[Math.floor(Math.random() * 16)]).join('');
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function toggleRawEvidence() {
+  const el = document.getElementById('raw-evidence');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── Animate counter ─────────────────────────────────────
+function animateCounter(el, target, duration = 2000) {
+  let start = 0;
+  const step = (target / duration) * 16;
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.floor(start).toLocaleString();
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  animateCounter(document.getElementById('counter-wells'), 1247, 2000);
+});
+</script>
+</body>
+</html>
