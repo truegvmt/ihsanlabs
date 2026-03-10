@@ -1,107 +1,149 @@
 # Ihsan Labs — Waqf & Charity Intelligence Engine
 
 > **Excellence in action. Ethical intelligence.**  
-> The OpenAI for philanthropy — a 2030-grade donor experience for Muslim charitable giving.
+> The intelligent engine for philanthropy — evidence-guided giving for Muslims worldwide.
+
+Ihsan Labs helps donors allocate sadaqah and waqf to the highest-impact opportunities, backed by IATI (International Aid Transparency Initiative) open aid data. Using ethical AI, the system generates scored, cited allocation plans based on factual donor intentions.
 
 ---
 
-## What This Is
+## 🛠 Tech Stack
 
-Ihsan Labs is a frictionless platform that helps Muslims allocate charity and waqf funds to the highest-impact opportunities. It combines verified nonprofit data, RAG-powered AI analysis, and a spiritually resonant UX into a single decision system.
-
-A donor states their intention, budget, and region in under 15 seconds. The system returns a soul-calibrated allocation plan — verified, scored, cited, and executable in one tap.
+* **Frontend**: Next.js 15 (App Router)
+* **Language**: TypeScript
+* **Package Manager**: pnpm (Workspaces)
+* **Database & Auth**: Supabase (Postgres + pgvector)
+* **Backend Logic**: Supabase Edge Functions (Deno)
+* **Deployment**: Vercel (Web) & Supabase (Functions)
+* **Integration**: Stripe (Payments), IATI (Aid Data)
 
 ---
 
-## Repository Structure
+## 📂 Repository Structure
 
-```
-ihsan-labs/
-├── apps/
-│   ├── web/                  # Next.js 14 frontend (donor experience)
-│   └── api/                  # Node/Express API layer
-├── packages/
-│   ├── ai-engine/            # LLM prompt templates, chain orchestration
-│   ├── rag-pipeline/         # PDF ingestion, chunking, embedding, retrieval
-│   └── scoring/              # Deterministic impact + barakah scorer
-├── supabase/
-│   ├── migrations/           # Unified schema.sql + incremental migrations
-│   └── functions/            # Edge functions (Deno/TypeScript)
-│       ├── allocation-optimizer/
-│       ├── due-diligence/
-│       ├── micro-update-composer/
-│       └── waqf-agent/
-├── docs/
-│   ├── product.md            # Human-first UX spec, brand, donor journey, KPIs
-│   ├── technical.md          # Engineering reference: stack, setup, DB, AI layer
-│   ├── architecture.md       # System design & data flow diagrams
-│   ├── graphql.md            # Charity Navigator GraphQL — beginner step-by-step
-│   ├── rag-pipeline.md       # RAG ingestion, chunking, embedding, retrieval
-│   ├── scoring-model.md      # Barakah score methodology & weight tables
-│   ├── prompt-templates.md   # All LLM prompts (A–E) with full I/O schemas
-│   ├── edge-functions.md     # Edge function specs, request/response, deployment
-│   └── roadmap.md            # Phased implementation roadmap (Phases 0–3)
-├── scripts/
-│   ├── seed-projects.sh      # Seed initial project data
-│   ├── ingest-pdfs.sh        # Batch PDF ingestion for RAG
-│   └── deploy.sh             # Full deployment script
-└── infra/
-    └── docker-compose.yml    # Local dev stack
+```text
+apps/
+  web/                  # Next.js 15 application (Frontend)
+    app/
+      api/              # API routes (Proxies to Edge Functions)
+supabase/
+  functions/            # LLM-powered Edge Functions (Anthropic/OpenAI)
+  migrations/           # SQL schema v1.1.0 + IATI ETL views
+scripts/                # IATI ETL orchestrators and seeding scripts
+public/                 # Global static assets (in apps/web/public)
 ```
 
----
-
-## Core Principles
-
-1. **Latency ≤ 2s** for all core donor flows.
-2. **Evidence in triplicate**: every recommendation shows audit hash + provenance link + document snapshot.
-3. **Privacy-by-default**: minimal PII; federated where possible.
-4. **LLMs on RAG'd evidence only**: no hallucinated claims; every output carries chunk citations.
-5. **Immutable audit trail**: every action, score, and payment is hashed and logged.
+| Directory | Purpose |
+| :--- | :--- |
+| `apps/web` | The main Next.js SPA including donor forms and resonance previews. |
+| `supabase/functions` | Core intelligence engine (Allocation, Due Diligence, Agents). |
+| `supabase/migrations` | Database schema, IATI tables, and performance SQL views. |
+| `scripts` | Python and Shell scripts for IATI data ingestion and entity resolution. |
 
 ---
 
-## Quick Start
+## 🚀 Local Development
+
+Follow these steps to get the environment running locally:
 
 ```bash
 # 1. Install dependencies
 pnpm install
 
-# 2. Configure environment
+# 2. Copy environment variables
 cp .env.example .env
-# Fill in: SUPABASE_URL, SUPABASE_ANON_KEY, ANTHROPIC_API_KEY,
-#          CHARITY_NAVIGATOR_API_KEY, GLOBALGIVING_API_KEY
 
-# 3. Run database migrations
-pnpm supabase db push
+# 3. Start local Supabase instance
+pnpm db:start
 
-# 4. Seed initial data
-bash scripts/seed-projects.sh
+# 4. Apply database schema and migrations
+pnpm db:push
 
-# 5. Start development
+# 5. Seed project data and IATI records
+pnpm seed
+bash scripts/ingest-iati.sh --limit 100
+
+# 6. Run the development server
 pnpm dev
 ```
 
 ---
 
-## Phase Roadmap (summary)
+## 🔑 Environment Variables
 
-| Phase | Timeline | Deliverable |
-|-------|----------|-------------|
-| 0 — MVP | 0–3 months | Intention Tap + Resonance Preview + Charity Navigator integration + Living Waqf Card |
-| 1 — Trust | 3–6 months | RAG ingestion + LLM due diligence + cryptographic receipts |
-| 2 — Automation | 6–12 months | Autonomous agents + IoT telemetry + federated personalization |
-| 3 — 2030-grade | 12–36 months | ZK attestations + digital twins + AR site visits |
+Documented in `.env.example`. Ensure the following are set before starting:
 
-See [`docs/roadmap.md`](docs/roadmap.md) for full detail.
-
----
-
-## Branding
-
-**Ihsan Labs** — from *iḥsān* (إحسان): to do something with excellence and full awareness of the divine witness.  
-Clean. Minimal. Purposeful. Every pixel earns its place.
+| Variable | Description |
+| :--- | :--- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public key for browser-side Supabase client. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret key for server-side API routes (Admin access). |
+| `DATABASE_URL` | Direct Postgres connection string for migrations. |
+| `ANTHROPIC_API_KEY` | Used by Edge Functions for allocation logic (Claude 3.5). |
+| `OPENAI_API_KEY` | Used for generating text embeddings (text-embedding-3-small). |
+| `IATI_API_KEY` | Exchange rate normalization key for IATI data. |
+| `STRIPE_SECRET_KEY` | Stripe secret for processing donations. |
 
 ---
 
-*Built for the ummah. Verified for scholars. Trusted by donors.*
+## 🖥 Running the Application
+
+Running `pnpm dev` starts the Next.js development server.
+
+* **Local URL**: `http://localhost:3000`
+* **Frontend**: Responsive donor dashboard and donation intention form.
+* **API Routes**: Available at `/api/allocate`, `/api/donations`, and `/api/metrics`.
+
+> [!NOTE]
+> Next.js API routes act as a secure proxy to Supabase Edge Functions, ensuring LLM secrets are never exposed to the client.
+
+---
+
+## 🚢 Deployment
+
+The application is optimized for deployment via **Vercel**.
+
+### Preview Deployment
+Every branch push triggers a Vercel preview deployment automatically.
+
+### Production Deployment
+```bash
+# Deploy to production
+vercel --prod
+```
+
+### Edge Functions
+Deploy logic updates to Supabase:
+```bash
+pnpm deploy:functions
+```
+
+---
+
+## 🔄 Core Workflow
+
+The system follows a high-integrity path from donor intention to impact:
+
+```mermaid
+graph LR
+    User([User]) --> Input[Donation Input]
+    Input --> API[Next.js API Proxy]
+    API --> LLM[IATI Allocation Engine]
+    LLM --> DB[(Supabase Persistence)]
+    DB --> Resp[Scored Allocation Response]
+    Resp --> User
+```
+
+1. **Intention**: User specifies donation goals (e.g., "Water projects in East Africa").
+2. **Analysis**: System queries IATI data through SQL views (`v_expense_ratios`).
+3. **Allocation**: LLM generates a scored plan with cited evidence.
+4. **Persistence**: Plan and intentions are stored in an immutable audit log.
+5. **Response**: User receives a detailed transparency report and resonance preview.
+
+---
+
+## 📜 Principles
+
+1. **IATI-First**: Factual metrics always supersede LLM hallucinations.
+2. **Immutable Audit**: All modifications are appended, never updated.
+3. **Privacy by Design**: Personal data is isolated; intention processing is anonymized.

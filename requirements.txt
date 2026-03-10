@@ -1,0 +1,20 @@
+# requirements.txt
+# Python dependencies for IATI ETL pipeline (scripts/parse_iati.py, packages/etl/)
+# Install: pip install -r requirements.txt
+# or: uv pip install -r requirements.txt
+
+# Fuzzy entity resolution for org name canonicalization
+rapidfuzz>=3.6.1
+
+# XML parsing (standard library lxml for large IATI bulk files)
+lxml>=5.1.0
+
+# HTTP client (for Supabase REST API + exchange rate API)
+# Using urllib from stdlib for minimal deps; requests optional for convenience
+requests>=2.31.0
+
+# JSON schema validation for IATI records
+jsonschema>=4.21.0
+
+# Progress bar for bulk ingestion
+tqdm>=4.66.0

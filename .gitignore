@@ -1,0 +1,41 @@
+# Environment — NEVER commit secrets
+.env
+.env.local
+.env.production
+.env.staging
+.env.staging
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Supabase local
+.supabase/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Temporary
+*.local
+/tmp/ihsan_*
+
+# ETL observability output (never commit run logs)
+logs/
+/prompts_audit/results/
+tmp/iati/

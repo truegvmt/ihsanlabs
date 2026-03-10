@@ -1,0 +1,14 @@
+vercel --prod
+# Prerequisites before running:
+# 1. pnpm install
+# 2. vercel link (or vercel login + create project on first run)
+# 3. Set env vars in Vercel dashboard or:
+#    vercel env add SUPABASE_SERVICE_ROLE_KEY production
+#    vercel env add ANTHROPIC_API_KEY production
+#    vercel env add OPENAI_API_KEY production
+#    vercel env add STRIPE_SECRET_KEY production
+#
+# Root directory for Vercel: apps/web
+# Build command: pnpm build
+# Output directory: .next
+# Node.js version: 20.x

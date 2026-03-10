@@ -1,0 +1,22 @@
+{
+    "name": "ihsan-labs",
+    "private": true,
+    "version": "0.1.0",
+    "description": "Waqf & Charity Intelligence Engine — the OpenAI for philanthropy",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "engines": {
+        "node": ">=20",
+        "pnpm": ">=8"
+    },
+    "scripts": {
+        "dev": "pnpm --filter web dev",
+        "db:push": "supabase db push",
+        "db:start": "supabase start",
+        "seed": "bash scripts/seed-projects.sh",
+        "ingest": "bash scripts/ingest-pdfs.sh",
+        "deploy:functions": "supabase functions deploy allocation-optimizer && supabase functions deploy due-diligence && supabase functions deploy micro-update-composer && supabase functions deploy waqf-agent"
+    }
+}
