@@ -7,8 +7,16 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+// Fail-fast if config is missing
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    throw new Error(
+        "CRITICAL: Supabase environment variables are missing. " +
+        "Ensure apps/web/.env.local exists and contains NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
+    );
+}
 
 export async function POST(req: NextRequest) {
     try {
@@ -47,13 +55,32 @@ export async function POST(req: NextRequest) {
         if (!edgeRes.ok) {
             const text = await edgeRes.text();
             console.error("[/api/allocate] edge fn error:", edgeRes.status, text);
-            return NextResponse.json({ error: "Allocation service unavailable" }, { status: 502 });
+            return NextResponse.json(
+                { error: "Upstream allocation service error", detail: text },
+                { status: 502 }
+            );
         }
 
         const data = await edgeRes.json();
         return NextResponse.json(data);
-    } catch (err) {
+    } catch (err: any) {
         console.error("[/api/allocate] error:", err);
+
+        // Handle network/connection failures explicitly (P2-FALLBACK)
+        if (err.cause?.code === "ECONNREFUSED" || err.message?.includes("fetch failed")) {
+            return NextResponse.json(
+                {
+                    error: "Allocation service temporarily unavailable",
+                    retry_after: 30,
+                    code: "UPSTREAM_UNREACHABLE"
+                },
+                {
+                    status: 503,
+                    headers: { "Retry-After": "30" }
+                }
+            );
+        }
+
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }
